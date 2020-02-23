@@ -34,16 +34,16 @@ RUN \
         /tmp/openzwave-db.tar.gz \
         --strip 1 -C /tmp/db \
     \
-    && mkdir /usr/etc \
-    && mv /tmp/db/config /usr/etc/openzwave \
+    && mkdir /config/OZW \
+    && mv /tmp/db/config /config/OZW \
     \
     && curl -J -L -o /tmp/zwave2mqtt.tar.gz \
         "https://github.com/OpenZWave/Zwave2Mqtt/archive/v2.1.1.tar.gz" \
     && tar zxvf \
         /tmp/zwave2mqtt.tar.gz \
-        --strip 1 -C /opt \
+        --strip 1 -C /config \
     \
-    && cd /opt \
+    && cd /config \
     && npm config set unsafe-perm \
     && npm install \
     && npm run build \
@@ -51,7 +51,7 @@ RUN \
     \
     && yarn global add modclean \
     && modclean \
-        --path /opt \
+        --path /config \
         --no-progress \
         --keep-empty \
         --run \
@@ -61,14 +61,14 @@ RUN \
     && apk del --purge .build-dependencies \
     \
     && rm -f -r \
-        /etc/nginx \
-        /etc/openzwave \
-        /root/.node-gyp \
-        /root/.npm \
-        /tmp/.[!.]* \
-        /tmp/* \
-        /usr/lib/node_modules \
-        /usr/local/share/.cache
+        /addons/etc/nginx \
+        /OZW/openzwave \
+        /addons/root/.node-gyp \
+        /addons/root/.npm \
+        /addons//tmp/.[!.]* \
+        /addons//tmp/* \
+        /addons//usr/lib/node_modules \
+        /addons/usr/local/share/.cache
 
 # Copy root filesystem
 COPY rootfs /
@@ -81,18 +81,18 @@ ARG BUILD_VERSION
 
 # Labels
 LABEL \
-    io.hass.name="Z-Wave to MQTT" \
+    io.hass.name="CorZ-Wave to MQTT" \
     io.hass.description="Fully configurable Z-Wave to MQTT gateway and control panel." \
     io.hass.arch="${BUILD_ARCH}" \
     io.hass.type="addon" \
     io.hass.version=${BUILD_VERSION} \
-    maintainer="Franck Nijhof <frenck@addons.community>" \
+    maintainer="Corcent <corapps@corcent.com>" \
     org.label-schema.description="Fully configurable Z-Wave to MQTT gateway and control panel." \
     org.label-schema.build-date=${BUILD_DATE} \
     org.label-schema.name="Z-Wave to MQTT" \
-    org.label-schema.schema-version="1.0" \
-    org.label-schema.url="https://community.home-assistant.io/t/community-hass-io-add-on-z-wave-to-mqtt/115899?u=frenck" \
+    org.label-schema.schema-version="1.1" \
+    org.label-schema.url="" \
     org.label-schema.usage="https://github.com/hassio-addons/addon-zwave2mqtt/tree/master/README.md" \
     org.label-schema.vcs-ref=${BUILD_REF} \
     org.label-schema.vcs-url="https://github.com/hassio-addons/addon-zwave2mqtt" \
-    org.label-schema.vendor="Home Assistant Community Add-ons"
+    org.label-schema.vendor="Corcent"
